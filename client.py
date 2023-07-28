@@ -3,11 +3,17 @@ import sys
 from tools import create_data, receive_data, PREFIX
 import threading
 
-USERNAME = sys.argv[1]
+if len(sys.argv) > 1:
+	USERNAME = sys.argv[1]
+else:
+	USERNAME = input('Username: ')
 
-IP = socket.gethostbyname(socket.gethostname())
-PORT = 5500
-ADDR = (IP, PORT)
+if len(sys.argv) > 2:
+	ADDR = sys.argv[2].split(':')
+else:
+	ADDR = input('Address: ').split(':')
+
+ADDR = (ADDR[0], int(ADDR[1]))
 
 def update_server_info():
 	print(f'Users: {server_info["clients_connected"]}/{server_info["clients_limit"]}')

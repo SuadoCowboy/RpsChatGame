@@ -115,9 +115,6 @@ commands['commands'] = {'function':get_commands,'need_argument':False}
 
 illegal_names = [PREFIX, 'server']
 
-IP = socket.gethostbyname(socket.gethostname())
-PORT = 5500
-
 def sendall(data, sentby: str='server', type: str='message'):
 	data = create_data(data, sentby, False, type)
 
@@ -242,11 +239,15 @@ def handle_client(conn: socket.socket, addr):
 	
 	print_and_log(f'{addr[0]}:{addr[1]}@{client_username} disconnected.')
 
+IP = socket.gethostbyname(socket.gethostname())
+
 # Internet addr family: AF_INET => IPv4
 # protocol: SOCK_STREAM => TCP
 print_and_log('starting server')
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-	s.bind((IP, PORT))
+	s.bind((IP, 0))
+	PORT = s.getsockname()[1]
+	print_and_log(f'Address: {IP}:{PORT}')
 	
 	try:
 		while True:
